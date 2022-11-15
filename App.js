@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Switch, Text, View } from 'react-native';
+import Slider from '@react-native-community/slider';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 
 export default function App() {
@@ -8,7 +9,6 @@ export default function App() {
   const [isStrobeOn, setStrobeOn] = useState(false);
   const [strobeSpeed, setStrobeSpeed] = useState(1);
   const [isTorchOn, setTorchOn] = useState(false)
-  const [counter, setCounter] = useState(0)
 
   useEffect(() => {
     requestPermission()
@@ -21,26 +21,32 @@ export default function App() {
   useEffect(() => {
     const interval = isStrobeOn
       ? setInterval(() => {
-        setCounter(counter => counter + 1)
         setTorchOn(true)
         setTimeout(()=>{
           setTorchOn(false)
-        }, 100)
-      }, 200)
+        }, (10 / strobeSpeed))
+      }, (1000/strobeSpeed))
       : setTorchOn(false);
     return () => clearInterval(interval);
-  }, [isStrobeOn])
+  }, [isStrobeOn, strobeSpeed])
 
   return (
     <View style={styles.container}>
-      <Text style={{color: '#fff', margin: 20}}>STROBE</Text>
-      <View style={{width: '100%', height: '80%', backgroundColor: isTorchOn ? '#fff' : '#000'}}></View>
+      <Text style={{color: '#fff', fontSize: 20, marginTop: 20}}>S T R O B E</Text>
+      <View style={{width: '100%', height: '75%', backgroundColor: isTorchOn ? '#fff' : '#000'}}></View>
       <Camera type={CameraType.back} flashMode={isTorchOn ? FlashMode.torch : FlashMode.off} style={{ width: 1, height: 1, alignSelf: 'stretch'}}/>
-      {permission ? <Text>{`${isTorchOn}, ${counter}`}</Text> : null}
+      {/* {permission ? <Text>{`${isTorchOn}, ${counter}`}</Text> : null} */}
       <Switch
         value={isStrobeOn}
         onValueChange={toggleStrobe}
-        style={{trackColor: '#999'}}
+        trackColor={{false: '#999'}}
+      />
+      <Slider
+        style={{width: '60%', height: 40}}
+        minimumValue={1}
+        maximumValue={10}
+        maximumTrackTintColor='#fff'
+        onValueChange={value => setStrobeSpeed(value)}
       />
       <StatusBar style="auto" />
     </View>
