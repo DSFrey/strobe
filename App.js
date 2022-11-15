@@ -25,20 +25,22 @@ export default function App() {
         setTorchOn(true)
         setTimeout(()=>{
           setTorchOn(false)
-        }, 1000)
-      }, 2000)
+        }, 100)
+      }, 200)
       : setTorchOn(false);
     return () => clearInterval(interval);
   }, [isStrobeOn])
 
   return (
     <View style={styles.container}>
-      <Text>STROBE</Text>
+      <Text style={{color: '#fff', margin: 20}}>STROBE</Text>
+      <View style={{width: '100%', height: '80%', backgroundColor: isTorchOn ? '#fff' : '#000'}}></View>
+      <Camera type={CameraType.back} flashMode={isTorchOn ? FlashMode.torch : FlashMode.off} style={{ width: 1, height: 1, alignSelf: 'stretch'}}/>
       {permission ? <Text>{`${isTorchOn}, ${counter}`}</Text> : null}
-      <Camera type={CameraType.back} flashMode={isTorchOn ? FlashMode.torch : FlashMode.off} style={{ flex: 1, width: '100%', height: '100%', alignSelf: 'stretch'}}/>
       <Switch
         value={isStrobeOn}
         onValueChange={toggleStrobe}
+        style={{trackColor: '#999'}}
       />
       <StatusBar style="auto" />
     </View>
@@ -48,8 +50,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
   },
