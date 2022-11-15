@@ -24,7 +24,7 @@ export default function App() {
         setTorchOn(true)
         setTimeout(()=>{
           setTorchOn(false)
-        }, (10 / strobeSpeed))
+        }, (10))
       }, (1000/strobeSpeed))
       : setTorchOn(false);
     return () => clearInterval(interval);
@@ -35,7 +35,6 @@ export default function App() {
       <Text style={{color: '#fff', fontSize: 20, marginTop: 20}}>S T R O B E</Text>
       <View style={{width: '100%', height: '75%', backgroundColor: isTorchOn ? '#fff' : '#000'}}></View>
       <Camera type={CameraType.back} flashMode={isTorchOn ? FlashMode.torch : FlashMode.off} style={{ width: 1, height: 1, alignSelf: 'stretch'}}/>
-      {/* {permission ? <Text>{`${isTorchOn}, ${counter}`}</Text> : null} */}
       <Switch
         value={isStrobeOn}
         onValueChange={toggleStrobe}
@@ -43,6 +42,7 @@ export default function App() {
       />
       <Slider
         style={{width: '60%', height: 40}}
+        value={strobeSpeed}
         minimumValue={1}
         maximumValue={10}
         maximumTrackTintColor='#fff'
